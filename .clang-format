@@ -29,7 +29,7 @@ BraceWrapping:
 BreakBeforeBraces: Custom
 BreakBeforeBinaryOperators: true
 BreakStringLiterals: true
-ColumnLimit: 120
+ColumnLimit: 80
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
