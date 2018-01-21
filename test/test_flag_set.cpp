@@ -136,10 +136,12 @@ namespace
     auto one = static_cast<Example>(1);
     auto two = static_cast<Example>(2);
     auto four = static_cast<Example>(4);
+    auto eight = static_cast<Example>(8);
     flag_set<Example> flag_set_zero{zero};
     flag_set<Example> flag_set_one{one};
     flag_set<Example> flag_set_two{two};
     flag_set<Example> flag_set_four{four};
+    flag_set<Example> flag_set_eight{eight};
 }
 
 TEST(FlagSet, bitOR)
@@ -180,4 +182,41 @@ TEST(FlagSet, bitORAssign)
     // 011
     // 100
     EXPECT_EQ(0b111, flag_set_modified.value());
+}
+
+TEST(FlagSet, bitAND)
+{
+    auto result = flag_set_zero & flag_set_one;
+    // 0
+    // 1
+    EXPECT_EQ(0b0, result.value());
+    result.clear();
+
+    result = flag_set_one & flag_set_two;
+    // 01
+    // 10
+    EXPECT_EQ(0b0, result.value());
+    result.clear();
+
+    result = flag_set_one & flag_set_four;
+    // 001
+    // 100
+    EXPECT_EQ(0b0, result.value());
+    result.clear();
+
+    result = flag_set_two & flag_set_four;
+    // 010
+    // 100
+    EXPECT_EQ(0b0, result.value());
+    result.clear();
+
+    result = flag_set_one & flag_set_one;
+    EXPECT_EQ(0b1, result.value());
+    result.clear();
+
+    result = flag_set_two & flag_set_two;
+    // 10
+    // 10
+    EXPECT_EQ(0b10, result.value());
+    result.clear();
 }

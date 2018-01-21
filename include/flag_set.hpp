@@ -87,8 +87,31 @@ namespace flag_set
 
             flag_set& operator|=(enum_type e) noexcept
             {
-                value_ |= static_cast<rep_type>(e);
+                value_ |= static_cast<decltype(value_)>(e);
                 return *this;
+            }
+
+            friend constexpr flag_set operator&(flag_set lhs, flag_set rhs) noexcept
+            {
+                auto val = lhs.value_ & rhs.value_;
+                return flag_set{static_cast<enum_type>(val)};
+            }
+
+            flag_set& operator&=(const flag_set& rhs) noexcept
+            {
+                value_ &= rhs.value_;
+                return *this;
+            }
+
+            flag_set& operator&=(enum_type e) noexcept
+            {
+                value_ &= static_cast<decltype(value_)>(e);
+                return *this;
+            }
+
+            constexpr void clear() noexcept
+            {
+               value_ = 0;
             }
 
         private:
