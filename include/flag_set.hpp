@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <cstddef>
 #include <climits>
+#include <utility>
 
 namespace flag_set
 {
@@ -66,6 +67,11 @@ namespace flag_set
                 return !(lhs == rhs);
             }
 
+            void swap(flag_set& other) noexcept
+            {
+                std::swap(value_, other.value_);
+            }
+
         private:
             void assign(enum_type e) noexcept
             {
@@ -76,5 +82,11 @@ namespace flag_set
             // an enum class-like thing.
             rep_type value_{};
         };
+    }
+
+    template<class E>
+    void swap(flag_set<E>& lhs, flag_set<E>& rhs) noexcept
+    {
+        lhs.swap(rhs);
     }
 }

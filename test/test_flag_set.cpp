@@ -105,3 +105,27 @@ TEST(FlagSet, moveAssign)
     move_assigned = std::move(move_constructed);
     EXPECT_EQ(one, move_assigned);
 }
+
+TEST(FlagSet, swapMemberFunction)
+{
+    ExampleEnumSet one{Example::One};
+    ExampleEnumSet two{Example::Two};
+    EXPECT_NE(one, two);
+    EXPECT_EQ(1, one.value());
+    EXPECT_EQ(2, two.value());
+    one.swap(two);
+    EXPECT_EQ(2, one.value());
+    EXPECT_EQ(1, two.value());
+}
+
+TEST(FlagSet, swapFreeFunction)
+{
+    ExampleEnumSet one{Example::One};
+    ExampleEnumSet two{Example::Two};
+    EXPECT_NE(one, two);
+    EXPECT_EQ(1, one.value());
+    EXPECT_EQ(2, two.value());
+    swap(one, two);
+    EXPECT_EQ(2, one.value());
+    EXPECT_EQ(1, two.value());
+}
