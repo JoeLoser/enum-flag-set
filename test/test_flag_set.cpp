@@ -39,3 +39,8 @@ TEST(FlagSet, constructFromOneElementProperly)
     constexpr auto ut = ExampleEnumSet{Example::One};
     static_assert(static_cast<ExampleEnumSet::underlying_type>(1) == ut.value());
 }
+
+TEST(FlagSet, canAssignFromEnumerator)
+{
+    static_assert(std::is_assignable_v<ExampleEnumSet, decltype(Example::Two)>);
+}

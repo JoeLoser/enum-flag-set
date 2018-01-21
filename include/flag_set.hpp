@@ -37,12 +37,23 @@ namespace flag_set
                 : value_{static_cast<rep_type>(e)}
             {}
 
+            constexpr flag_set& operator=(enum_type e) noexcept
+            {
+                assign(e);
+                return *this;
+            }
+
             constexpr underlying_type value() const noexcept
             {
                 return static_cast<underlying_type>(value_);
             }
 
         private:
+            void assign(enum_type e) noexcept
+            {
+                value_ = static_cast<rep_type>(e);
+            }
+
             // At any given time, only *one* value is represented when using
             // an enum class-like thing.
             rep_type value_{};
