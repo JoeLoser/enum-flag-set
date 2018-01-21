@@ -130,6 +130,14 @@ TEST(FlagSet, swapFreeFunction)
     EXPECT_EQ(1, two.value());
 }
 
+TEST(FlagSet, setValue)
+{
+    ExampleEnumSet ut{};
+    constexpr auto whatever = 42u;
+    ut.set_value(whatever);
+    EXPECT_EQ(whatever, ut.value());
+}
+
 namespace
 {
     auto zero = static_cast<Example>(0);

@@ -54,6 +54,12 @@ namespace flag_set
                 return static_cast<underlying_type>(value_);
             }
 
+            constexpr void set_value(underlying_type val) noexcept(
+                noexcept(assign(static_cast<enum_type>(val))))
+            {
+                assign(static_cast<enum_type>(val));
+            }
+
             // Equality
             friend constexpr bool
             operator==(flag_set lhs, flag_set rhs) noexcept(
@@ -73,7 +79,8 @@ namespace flag_set
                 std::swap(value_, other.value_);
             }
 
-            friend constexpr flag_set operator|(flag_set lhs, flag_set rhs) noexcept
+            friend constexpr flag_set operator|(flag_set lhs,
+                                                flag_set rhs) noexcept
             {
                 auto val = lhs.value_ | rhs.value_;
                 return flag_set{static_cast<enum_type>(val)};
@@ -91,7 +98,8 @@ namespace flag_set
                 return *this;
             }
 
-            friend constexpr flag_set operator&(flag_set lhs, flag_set rhs) noexcept
+            friend constexpr flag_set operator&(flag_set lhs,
+                                                flag_set rhs) noexcept
             {
                 auto val = lhs.value_ & rhs.value_;
                 return flag_set{static_cast<enum_type>(val)};
@@ -111,7 +119,7 @@ namespace flag_set
 
             constexpr void clear() noexcept
             {
-               value_ = 0;
+                value_ = 0;
             }
 
         private:
