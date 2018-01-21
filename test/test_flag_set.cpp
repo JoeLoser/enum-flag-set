@@ -9,11 +9,11 @@ namespace
 {
     enum class Example : int
     {
-        One = 1,
-        Two = 1 << 1,
-        Four = 2 << 2,
-        Eight = 2 << 3,
-        Sixteen = 2 << 4,
+        One = 1,          // 00001
+        Two = 1 << 1,     // 00010
+        Four = 2 << 2,    // 00100
+        Eight = 2 << 3,   // 01000
+        Sixteen = 2 << 4, // 10000
     };
 
     using ExampleEnumSet = flag_set<Example>;
@@ -128,4 +128,56 @@ TEST(FlagSet, swapFreeFunction)
     swap(one, two);
     EXPECT_EQ(2, one.value());
     EXPECT_EQ(1, two.value());
+}
+
+namespace
+{
+    auto zero = static_cast<Example>(0);
+    auto one = static_cast<Example>(1);
+    auto two = static_cast<Example>(2);
+    auto four = static_cast<Example>(4);
+    flag_set<Example> flag_set_zero{zero};
+    flag_set<Example> flag_set_one{one};
+    flag_set<Example> flag_set_two{two};
+    flag_set<Example> flag_set_four{four};
+}
+
+TEST(FlagSet, bitOR)
+{
+    auto result = flag_set_zero | flag_set_one;
+    // 0
+    // 1
+    EXPECT_EQ(0b1, result.value());
+
+    result = flag_set_one | flag_set_two;
+    // 01
+    // 10
+    EXPECT_EQ(0b11, result.value());
+
+    result = flag_set_one | flag_set_four;
+    // 001
+    // 100
+    EXPECT_EQ(0b101, result.value());
+
+    result = flag_set_two | flag_set_four;
+    // 010
+    // 100
+    EXPECT_EQ(0b110, result.value());
+}
+
+TEST(FlagSet, bitORAssign)
+{
+    auto flag_set_modified{flag_set_zero};
+    flag_set_modified |= flag_set_one;
+    EXPECT_EQ(0b1, flag_set_modified.value());
+
+    flag_set_modified |= flag_set_two;
+    // 01
+    // 10
+    EXPECT_EQ(0b11, flag_set_modified.value());
+
+    flag_set_modified |= flag_set_four;
+    // 011
+    // 100
+    EXPECT_EQ(0b111, flag_set_modified.value());
 }

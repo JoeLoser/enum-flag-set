@@ -36,7 +36,8 @@ namespace flag_set
             // User constructors
             // This is intentionally not explicit so that we can construct
             // a flag_set from an enumerator.
-            // TODO: May revisit option of enabling explicit ctor by means of macro.
+            // TODO: May revisit option of enabling explicit ctor by means of
+            // macro.
             constexpr flag_set(enum_type e) noexcept
                 : value_{static_cast<rep_type>(e)}
             {}
@@ -72,6 +73,24 @@ namespace flag_set
                 std::swap(value_, other.value_);
             }
 
+            friend constexpr flag_set operator|(flag_set lhs, flag_set rhs) noexcept
+            {
+                auto val = lhs.value_ | rhs.value_;
+                return flag_set{static_cast<enum_type>(val)};
+            }
+
+            flag_set& operator|=(const flag_set& rhs) noexcept
+            {
+                value_ |= rhs.value_;
+                return *this;
+            }
+
+            flag_set& operator|=(enum_type e) noexcept
+            {
+                value_ |= static_cast<rep_type>(e);
+                return *this;
+            }
+
         private:
             void assign(enum_type e) noexcept
             {
@@ -84,7 +103,7 @@ namespace flag_set
         };
     }
 
-    template<class E>
+    template <class E>
     void swap(flag_set<E>& lhs, flag_set<E>& rhs) noexcept
     {
         lhs.swap(rhs);
