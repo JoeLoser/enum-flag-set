@@ -33,7 +33,10 @@ namespace flag_set
             flag_set& operator=(flag_set&&) noexcept = default;
 
             // User constructors
-            constexpr explicit flag_set(enum_type e) noexcept
+            // This is intentionally not explicit so that we can construct
+            // a flag_set from an enumerator.
+            // TODO: May revisit option of enabling explicit ctor by means of macro.
+            constexpr flag_set(enum_type e) noexcept
                 : value_{static_cast<rep_type>(e)}
             {}
 

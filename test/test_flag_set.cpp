@@ -7,7 +7,7 @@ using namespace flag_set;
 
 namespace
 {
-    enum class Example
+    enum class Example : int
     {
         One = 1,
         Two = 1 << 1,
@@ -69,4 +69,39 @@ TEST(FlagSet, inequality)
     constexpr ExampleEnumSet rhs{Example::Two};
     static_assert(lhs != rhs);
     static_assert(rhs != lhs);
+}
+
+TEST(FlagSet, copyConstruct)
+{
+    const ExampleEnumSet one = Example::One;
+    ExampleEnumSet copy_constructed = one;
+    EXPECT_EQ(one, copy_constructed);
+}
+
+TEST(FlagSet, copyAssign)
+{
+    const ExampleEnumSet one = Example::One;
+    ExampleEnumSet copy_assigned = Example::Two;
+    EXPECT_NE(one, copy_assigned);
+    copy_assigned = one;
+    EXPECT_EQ(one, copy_assigned);
+}
+
+TEST(FlagSet, moveConstruct)
+{
+    const ExampleEnumSet one = Example::Two;
+    ExampleEnumSet copy_constructed = one;
+    ExampleEnumSet move_constructed = std::move(copy_constructed);
+    EXPECT_EQ(one, move_constructed);
+}
+
+TEST(FlagSet, moveAssign)
+{
+    ExampleEnumSet one = Example::One;
+    ExampleEnumSet copy_constructed = one;
+    ExampleEnumSet move_constructed = std::move(copy_constructed);
+    ExampleEnumSet move_assigned = Example::Two;
+    EXPECT_NE(one, move_assigned);
+    move_assigned = std::move(move_constructed);
+    EXPECT_EQ(one, move_assigned);
 }
