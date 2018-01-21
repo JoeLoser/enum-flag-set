@@ -33,3 +33,9 @@ TEST(FlagSet, canConstructFromOneElement)
 {
     static_assert(std::is_constructible_v<ExampleEnumSet, decltype(Example::One)>);
 }
+
+TEST(FlagSet, constructFromOneElementProperly)
+{
+    constexpr auto ut = ExampleEnumSet{Example::One};
+    static_assert(static_cast<ExampleEnumSet::underlying_type>(1) == ut.value());
+}

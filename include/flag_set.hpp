@@ -37,6 +37,11 @@ namespace flag_set
                 : value_{static_cast<rep_type>(e)}
             {}
 
+            constexpr underlying_type value() const noexcept
+            {
+                return static_cast<underlying_type>(value_);
+            }
+
         private:
             // At any given time, only *one* value is represented when using
             // an enum class-like thing.
