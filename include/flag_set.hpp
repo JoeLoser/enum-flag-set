@@ -37,7 +37,8 @@ namespace flag_set
                 : value_{static_cast<rep_type>(e)}
             {}
 
-            constexpr flag_set& operator=(enum_type e) noexcept
+            constexpr flag_set& operator=(enum_type e) noexcept(
+                noexcept(std::declval<flag_set>().assign(e)))
             {
                 assign(e);
                 return *this;
@@ -46,6 +47,20 @@ namespace flag_set
             constexpr underlying_type value() const noexcept
             {
                 return static_cast<underlying_type>(value_);
+            }
+
+            // Equality
+            friend constexpr bool
+            operator==(flag_set lhs, flag_set rhs) noexcept(
+                noexcept(std::declval<decltype(lhs)>().value()))
+            {
+                return lhs.value() == rhs.value();
+            }
+            friend constexpr bool
+            operator!=(flag_set lhs,
+                       flag_set rhs) noexcept(noexcept(operator==(lhs, rhs)))
+            {
+                return !(lhs == rhs);
             }
 
         private:
