@@ -135,4 +135,22 @@ namespace flag_set
     {
         lhs.swap(rhs);
     }
+
+    template <class E>
+    constexpr auto operator|(E lhs, E rhs) noexcept
+    {
+        static_assert(use_flags_v<E>,
+                      "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
+                      "ops for your enum class.");
+        return flag_set<E>(lhs) | rhs;
+    }
+
+    template <class E>
+    constexpr auto operator&(E lhs, E rhs) noexcept
+    {
+        static_assert(use_flags_v<E>,
+                      "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
+                      "ops for your enum class.");
+        return flag_set<E>(lhs) & rhs;
+    }
 }
