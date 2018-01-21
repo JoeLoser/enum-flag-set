@@ -113,6 +113,12 @@ namespace flag_set
                 return *this;
             }
 
+            constexpr flag_set operator~() const noexcept
+            {
+                auto negated = ~value_;
+                return flag_set{static_cast<enum_type>(negated)};
+            }
+
             constexpr void clear() noexcept
             {
                 value_ = 0;
@@ -135,22 +141,22 @@ namespace flag_set
     {
         lhs.swap(rhs);
     }
+}
 
-    template <class E>
-    constexpr auto operator|(E lhs, E rhs) noexcept
-    {
-        static_assert(use_flags_v<E>,
-                      "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
-                      "ops for your enum class.");
-        return flag_set<E>(lhs) | rhs;
-    }
+template <class E>
+constexpr auto operator|(E lhs, E rhs) noexcept
+{
+    static_assert(flag_set::use_flags_v<E>,
+                  "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
+                  "ops for your enum class.");
+    return flag_set::flag_set<E>(lhs) | rhs;
+}
 
-    template <class E>
-    constexpr auto operator&(E lhs, E rhs) noexcept
-    {
-        static_assert(use_flags_v<E>,
-                      "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
-                      "ops for your enum class.");
-        return flag_set<E>(lhs) & rhs;
-    }
+template <class E>
+constexpr auto operator&(E lhs, E rhs) noexcept
+{
+    static_assert(flag_set::use_flags_v<E>,
+                  "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
+                  "ops for your enum class.");
+    return flag_set::flag_set<E>(lhs) & rhs;
 }

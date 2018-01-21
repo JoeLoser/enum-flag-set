@@ -228,3 +228,26 @@ TEST(FlagSet, bitAND)
     EXPECT_EQ(0b10, result.value());
     result.clear();
 }
+
+TEST(FlagSet, negate)
+{
+    auto result = ~flag_set_zero;
+    EXPECT_EQ(~flag_set_zero.value(), result.value());
+    result.clear();
+
+    result  = ~flag_set_one;
+    EXPECT_EQ(~flag_set_one.value(), result.value());
+    result.clear();
+
+    result = ~flag_set_two;
+    EXPECT_EQ(~flag_set_two.value(), result.value());
+    result.clear();
+
+    result = ~flag_set_four;
+    EXPECT_EQ(~flag_set_four.value(), result.value());
+    result.clear();
+
+    result = ~flag_set_eight;
+    EXPECT_EQ(~flag_set_eight.value(), result.value());
+    result.clear();
+}
