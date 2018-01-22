@@ -9,10 +9,10 @@ namespace
 {
     enum class Example : int
     {
-        One = 1,          // 00001
-        Two = 1 << 1,     // 00010
-        Four = 2 << 2,    // 00100
-        Eight = 2 << 3,   // 01000
+        One = 1,        // 00001
+        Two = 1 << 1,   // 00010
+        Four = 2 << 2,  // 00100
+        Eight = 2 << 3, // 01000
     };
 
     using ExampleEnumSet = flag_set<Example>;
@@ -291,4 +291,26 @@ TEST(FlagSet, asBitSet)
     // 100
     // produces 111
     EXPECT_EQ(1 | 2 | 4, bitsetUnderTest.to_ulong());
+}
+
+namespace
+{
+    template <class From, class To>
+    struct is_explicitly_convertible
+    {
+        static constexpr bool value
+            = std::is_constructible_v<To,
+                                      From> && !std::is_convertible_v<From, To>;
+    };
+
+    template <class From, class To>
+    constexpr bool is_explicitly_convertible_v
+        = is_explicitly_convertible<From, To>::value;
+}
+
+TEST(FlagSet, hasExplicitConversionToBitset)
+{
+    ExampleEnumSet ut{};
+    static_assert(is_explicitly_convertible_v<ExampleEnumSet,
+                                              std::bitset<ut.size_in_bits()>>);
 }

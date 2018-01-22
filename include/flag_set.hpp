@@ -79,8 +79,8 @@ namespace flag_set
             friend constexpr flag_set operator|(flag_set lhs,
                                                 flag_set rhs) noexcept
             {
-//                auto val = lhs.value_ | rhs.value_;
-                return flag_set{static_cast<enum_type>(lhs.value_ | rhs.value_)};
+                auto val = lhs.value_ | rhs.value_;
+                return flag_set{static_cast<enum_type>(val)};
             }
 
             flag_set& operator|=(const flag_set& rhs) noexcept
@@ -153,6 +153,12 @@ namespace flag_set
             constexpr std::bitset<size_in_bits()> as_bitset() const noexcept
             {
                 return {value_};
+            }
+
+            explicit constexpr operator std::bitset<size_in_bits()>() const
+                noexcept
+            {
+                return as_bitset();
             }
 
         private:
