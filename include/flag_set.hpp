@@ -98,7 +98,7 @@ namespace flag_set
                                                 flag_set rhs) noexcept
             {
                 auto val = lhs.value_ & rhs.value_;
-                return flag_set{static_cast<enum_type>(val)};
+                return flag_set{val};
             }
 
             flag_set& operator&=(const flag_set& rhs) noexcept
@@ -116,7 +116,27 @@ namespace flag_set
             constexpr flag_set operator~() const noexcept
             {
                 auto negated = ~value_;
-                return flag_set{static_cast<enum_type>(negated)};
+                return flag_set{negated};
+            }
+
+            friend constexpr flag_set operator^(flag_set lhs,
+                                                flag_set rhs) noexcept
+            {
+                auto xor_value
+                    = static_cast<rep_type>(lhs.value() ^ rhs.value());
+                return flag_set{xor_value};
+            };
+
+            flag_set operator^=(const flag_set& rhs) noexcept
+            {
+                auto xor_value = value_ ^ rhs.value_;
+                return flag_set{xor_value};
+            }
+
+            flag_set& operator^=(enum_type e) noexcept
+            {
+                value_ ^= static_cast<decltype(value_)>(e);
+                return *this;
             }
 
             constexpr void clear() noexcept
@@ -125,6 +145,9 @@ namespace flag_set
             }
 
         private:
+            constexpr explicit flag_set(rep_type value) : value_{value}
+            {}
+
             void assign(enum_type e) noexcept
             {
                 value_ = static_cast<rep_type>(e);
@@ -159,4 +182,13 @@ constexpr auto operator&(E lhs, E rhs) noexcept
                   "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
                   "ops for your enum class.");
     return flag_set::flag_set<E>(lhs) & rhs;
+}
+
+template <class E>
+constexpr auto operator^(E lhs, E rhs) noexcept
+{
+    static_assert(flag_set::use_flags_v<E>,
+                  "Please use USE_FLAGS_FOR_ENUM macro to enable flag_set "
+                  "ops for your enum class.");
+    return flag_set::flag_set<E>(lhs) ^ rhs;
 }

@@ -235,7 +235,7 @@ TEST(FlagSet, negate)
     EXPECT_EQ(~flag_set_zero.value(), result.value());
     result.clear();
 
-    result  = ~flag_set_one;
+    result = ~flag_set_one;
     EXPECT_EQ(~flag_set_one.value(), result.value());
     result.clear();
 
@@ -249,5 +249,43 @@ TEST(FlagSet, negate)
 
     result = ~flag_set_eight;
     EXPECT_EQ(~flag_set_eight.value(), result.value());
+    result.clear();
+}
+
+TEST(FlagSet, exclusiveORWithEnumerator)
+{
+    ExampleEnumSet result = zero ^ zero;
+    EXPECT_EQ(0, result.value());
+    result.clear();
+
+    result = zero ^ one;
+    EXPECT_EQ(1, result.value());
+    result.clear();
+
+    result = one ^ zero;
+    EXPECT_EQ(1, result.value());
+    result.clear();
+
+    result = one ^ one;
+    EXPECT_EQ(0, result.value());
+    result.clear();
+}
+
+TEST(FlagSet, exclusiveORWithFlagSet)
+{
+    auto result = flag_set_zero ^ flag_set_zero;
+    EXPECT_EQ(0, result.value());
+    result.clear();
+
+    result = flag_set_zero ^ flag_set_one;
+    EXPECT_EQ(1, result.value());
+    result.clear();
+
+    result = flag_set_one ^ flag_set_zero;
+    EXPECT_EQ(1, result.value());
+    result.clear();
+
+    result = flag_set_one ^ flag_set_one;
+    EXPECT_EQ(0, result.value());
     result.clear();
 }
