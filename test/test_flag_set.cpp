@@ -13,7 +13,6 @@ namespace
         Two = 1 << 1,     // 00010
         Four = 2 << 2,    // 00100
         Eight = 2 << 3,   // 01000
-        Sixteen = 2 << 4, // 10000
     };
 
     using ExampleEnumSet = flag_set<Example>;
@@ -152,6 +151,13 @@ namespace
     flag_set<Example> flag_set_eight{eight};
 }
 
+TEST(FlagSet, bitOREnumerators)
+{
+    flag_set<Example> result = static_cast<Example>(1) | static_cast<Example>(2)
+                               | static_cast<Example>(4);
+    EXPECT_EQ(1 | 2 | 4, result.value());
+}
+
 TEST(FlagSet, bitOR)
 {
     auto result = flag_set_zero | flag_set_one;
@@ -198,94 +204,91 @@ TEST(FlagSet, bitAND)
     // 0
     // 1
     EXPECT_EQ(0b0, result.value());
-    result.clear();
 
     result = flag_set_one & flag_set_two;
     // 01
     // 10
     EXPECT_EQ(0b0, result.value());
-    result.clear();
 
     result = flag_set_one & flag_set_four;
     // 001
     // 100
     EXPECT_EQ(0b0, result.value());
-    result.clear();
 
     result = flag_set_two & flag_set_four;
     // 010
     // 100
     EXPECT_EQ(0b0, result.value());
-    result.clear();
 
     result = flag_set_one & flag_set_one;
     EXPECT_EQ(0b1, result.value());
-    result.clear();
 
     result = flag_set_two & flag_set_two;
     // 10
     // 10
     EXPECT_EQ(0b10, result.value());
-    result.clear();
 }
 
 TEST(FlagSet, negate)
 {
     auto result = ~flag_set_zero;
     EXPECT_EQ(~flag_set_zero.value(), result.value());
-    result.clear();
 
     result = ~flag_set_one;
     EXPECT_EQ(~flag_set_one.value(), result.value());
-    result.clear();
 
     result = ~flag_set_two;
     EXPECT_EQ(~flag_set_two.value(), result.value());
-    result.clear();
 
     result = ~flag_set_four;
     EXPECT_EQ(~flag_set_four.value(), result.value());
-    result.clear();
 
     result = ~flag_set_eight;
     EXPECT_EQ(~flag_set_eight.value(), result.value());
-    result.clear();
 }
 
 TEST(FlagSet, exclusiveORWithEnumerator)
 {
     ExampleEnumSet result = zero ^ zero;
     EXPECT_EQ(0, result.value());
-    result.clear();
 
     result = zero ^ one;
     EXPECT_EQ(1, result.value());
-    result.clear();
 
     result = one ^ zero;
     EXPECT_EQ(1, result.value());
-    result.clear();
 
     result = one ^ one;
     EXPECT_EQ(0, result.value());
-    result.clear();
 }
 
 TEST(FlagSet, exclusiveORWithFlagSet)
 {
     auto result = flag_set_zero ^ flag_set_zero;
     EXPECT_EQ(0, result.value());
-    result.clear();
 
     result = flag_set_zero ^ flag_set_one;
     EXPECT_EQ(1, result.value());
-    result.clear();
 
     result = flag_set_one ^ flag_set_zero;
     EXPECT_EQ(1, result.value());
-    result.clear();
 
     result = flag_set_one ^ flag_set_one;
     EXPECT_EQ(0, result.value());
-    result.clear();
+}
+
+TEST(FlagSet, asBitSet)
+{
+    auto bitsetUnderTest = flag_set_zero.as_bitset();
+    EXPECT_EQ(flag_set_zero.value(), bitsetUnderTest.to_ulong());
+
+    bitsetUnderTest = flag_set_one.as_bitset();
+    EXPECT_EQ(flag_set_one.value(), bitsetUnderTest.to_ulong());
+
+    bitsetUnderTest = (one | two | four).as_bitset();
+    // 001
+    // 010
+    // 100
+    // produces 111
+    EXPECT_EQ(1 | 2 | 4, bitsetUnderTest.to_ulong());
 }

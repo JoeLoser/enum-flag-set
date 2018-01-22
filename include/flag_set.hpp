@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <climits>
 #include <utility>
+#include <bitset>
 
 namespace flag_set
 {
@@ -78,8 +79,8 @@ namespace flag_set
             friend constexpr flag_set operator|(flag_set lhs,
                                                 flag_set rhs) noexcept
             {
-                auto val = lhs.value_ | rhs.value_;
-                return flag_set{static_cast<enum_type>(val)};
+//                auto val = lhs.value_ | rhs.value_;
+                return flag_set{static_cast<enum_type>(lhs.value_ | rhs.value_)};
             }
 
             flag_set& operator|=(const flag_set& rhs) noexcept
@@ -142,6 +143,16 @@ namespace flag_set
             constexpr void clear() noexcept
             {
                 value_ = 0;
+            }
+
+            constexpr static auto size_in_bits() noexcept
+            {
+                return sizeof(rep_type) * 8 * CHAR_BIT;
+            }
+
+            constexpr std::bitset<size_in_bits()> as_bitset() const noexcept
+            {
+                return {value_};
             }
 
         private:
