@@ -13,6 +13,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(verbose)
 include(compiler_id)
 include(build_type)
+include(git_hooks)
 
 add_library(flagset INTERFACE)
 add_library(Enum-Flag-Set::flagset ALIAS flagset)
