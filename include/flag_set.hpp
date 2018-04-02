@@ -161,6 +161,11 @@ namespace flag_set
                 return as_bitset();
             }
 
+            constexpr explicit operator bool() const noexcept
+            {
+                return value_ != 0;
+            }
+
         private:
             constexpr explicit flag_set(rep_type value) : value_{value}
             {}

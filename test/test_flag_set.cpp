@@ -314,3 +314,9 @@ TEST(FlagSet, hasExplicitConversionToBitset)
     static_assert(is_explicitly_convertible_v<ExampleEnumSet,
                                               std::bitset<ut.size_in_bits()>>);
 }
+
+TEST(FlagSet, isContextuallyConvertibleToBool)
+{
+    ExampleEnumSet ut{};
+    static_assert(is_explicitly_convertible_v<ExampleEnumSet, bool>);
+}
